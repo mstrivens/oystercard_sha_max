@@ -6,6 +6,7 @@ Write up a plan for how you will interact with your code and manually test in IR
 card = Oystercard.new
 card.top_up(10)
 card.touch_in --> signify it's in a journey ---> change in_journey attr - true
+expect(card.touch_in).to eq
 card.touch_out --> signify out of journey  ---> change in_journey to false
 card.in_journey? --> return that it's in journey --> this just returns whether it's  in journey or not
 

@@ -23,16 +23,6 @@ describe Oystercard do
 		expect{ subject.top_up 1 }.to raise_error 'Maximum balance exceeded'
 	end
 
-	it 'responds to deduct method with an argument' do
-		expect(subject).to respond_to(:deduct).with(1).argument
-  	end
-
-
-	it 'deducts an amount from the balance' do
-    	subject.top_up(20)
-    	expect{ subject.deduct(3)}.to change{ subject.balance }.by -3
-  end
-
 	describe '#touch_in' do
 		it 'responds to subject' do
 			expect(subject).to respond_to (:touch_in)
@@ -50,15 +40,22 @@ describe Oystercard do
 	end
 
 	describe '#touch_out' do
+		before do
+			subject.top_up(5)
+			subject.touch_in
+		end
+
 		it 'responds to subject' do
 			expect(subject).to respond_to (:touch_out)
 		end
 
 		it 'when user touches out, in journey changes to false' do
-			subject.top_up(5)
-			subject.touch_in
 			subject.touch_out
 			expect(subject).not_to be_in_journey
+		end
+
+		it 'deducts money from the balance' do
+			expect { subject.touch_out }.to change{ subject.balance }.by -Oystercard::MIN_BALANCE
 		end
 	end
 end
