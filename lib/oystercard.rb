@@ -40,7 +40,7 @@ class Oystercard
 			@journey["entry station"] = @entry_station
 		else
 			@journey["exit station"] = @exit_station
-			@journeys <<  
+			@journeys << @journey
 		end
 	end
 
