@@ -87,6 +87,6 @@ describe Oystercard do
 			subject.touch_in("Waterloo")
 			subject.touch_out(1,"Bermondsey")
 			expect(subject.journeys).to eq [{ "entry station" => "Waterloo", "exit station" => "Bermondsey" }]
-		end
+		en
 	end
 end
