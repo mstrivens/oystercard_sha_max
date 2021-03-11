@@ -1,6 +1,7 @@
 class Journey
 
-  def start_location
+  def start_location(entry_station)
+    @start_location = entry_station
   end
 
 end
