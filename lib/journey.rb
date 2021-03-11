@@ -1,11 +1,21 @@
 class Journey
-
+attr_reader :end_location, :start_location
   def start_location(entry_station)
     @start_location = entry_station
   end
 
-end
+  def end_location(exit_station)
+    @end_location = exit_station
+  end
 
+	def in_journey?
+		@start_location != nil
+	end
+
+  def calc_fare
+    Oystercard::MIN_BALANCE
+  end
+end
 # def initialize(start_station)
 #     @start_station = start_station
 # end

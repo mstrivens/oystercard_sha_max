@@ -4,7 +4,7 @@ class Oystercard
 
 	attr_reader :balance, :entry_station, :journeys
 
-	def initialize(journey = Journey.new, balance=1)
+	def initialize(balance=1,journey = Journey.new)
 		@balance = balance
 		@journeys = []
 		@entry_station = entry_station
@@ -13,10 +13,11 @@ class Oystercard
 
 	def top_up(amount)
 		@amount = amount
-    	@balance += amount unless max_balance_reached
+    @balance += amount unless max_balance_reached
 	end
 
 	def touch_in(entry_station = "unknown")
+		deduct(6) if @journey.in_journey? == true
 		@entry_station = entry_station unless min_balance_exceeded
 		store_journey
 		journey = Journey.new
@@ -25,27 +26,32 @@ class Oystercard
 		# @journey["entry station"] = entry_station
 	end
 
-	def in_journey?
-		@entry_station != nil
-	end
 
-	def touch_out(amount, exit_station = "unknown")
-		deduct(amount)
+	def touch_out(exit_station = "unknown")
+		if @journey.in_journey? == false
+			deduct(6)
+		else
+			deduct(@journey.calc_fare)
+		end
 		@entry_station = nil
 		@exit_station = exit_station
 		store_journey #@journey["exit station"] = exit_station
+		@journey.end_location(@exit_station)
 	end
 
 	private
 
 	def store_journey
-		if @entry_station
 			@journey_history = {}
-			@journey_history["entry station"] = @entry_station
-		else
-			@journey_history["exit station"] = @exit_station
+			if @entry_station == nil
+				@journey_history["exit station"] = @exit_station
+			elsif @exit_station == nil
+				@journey_history["entry station"] = @entry_station
+			else
+				@journey_history["exit station"] = @exit_station
+				@journey_history["entry station"] = @entry_station
+			end
 			@journeys << @journey_history
-		end
 	end
 
 	def max_balance_reached

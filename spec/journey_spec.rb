@@ -5,12 +5,25 @@ describe Journey do
     it 'responds to journey' do
       expect(subject).to respond_to(:start_location)
     end
-    it 'takes a entry_station from touch_in' do
+    it 'sets an entry station' do
       # station_double = double(:oystercard, entry_station: "Waterloo")
-      card = Oystercard.new#(station_double)
-      card.top_up(10)
-      card.touch_in("Waterloo")
       expect(subject.start_location("Waterloo")).to eq "Waterloo"
+    end
+
+  end
+  describe '#end_location' do
+    it 'responds to journey' do
+      expect(subject).to respond_to(:end_location)
+    end
+    it 'takes an exit station from touch in' do
+      expect(subject.end_location("Euston")).to eq "Euston"
+    end
+  end
+
+  describe '#in_journey' do
+    it 'knows it\'s in a journey' do
+      subject.start_location("Euston")
+      expect(subject).to be_in_journey
     end
   end
 end
