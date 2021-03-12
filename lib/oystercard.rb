@@ -17,15 +17,14 @@ class Oystercard
 	end
 
 	def touch_in(entry_station = "unknown")
-		touch_in_penalty_fare if @journey.completed_journey == false
-		@journey.start_location(entry_station) unless min_balance_exceeded
-		@journey.start_location(entry_station)
+		touch_in_penalty_fare if@journey_history.completed_journey? == false
+		@journey_history.start(entry_station) unless min_balance_exceeded
 	end
 
 
 	def touch_out(exit_station = "unknown")
-		touch_out_penalty_fare(exit_station) if @journey.completed_journey == true
-		touch_out_normal(exit_station) unless @journey.completed_journey == true
+	puts	touch_out_penalty_fare(exit_station) if @journey_history.completed_journey? == true
+		puts touch_out_normal(exit_station) unless @journey_history.completed_journey? == true
 	end
 
 	private
@@ -47,7 +46,7 @@ class Oystercard
 	def touch_out_normal(exit_station)
 		deduct(@journey.calc_fare)
 		store_journey
-		@journey.end_location(exit_station)
+		@journey_history.finish(exit_station)
 	end
 
 	def max_balance_reached

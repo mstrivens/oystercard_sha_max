@@ -33,10 +33,6 @@ describe Oystercard do
 			expect{ oystercard.touch_in("Euston") }.to raise_error 'Minimum balance needed'
 		end
 
-		it 'sets @entry_station to entry_station' do
-			subject.top_up(5)
-			expect(subject.touch_in('Waterloo')).to eq 'Waterloo'
-		end
 
 		# it 'sets @entry_station to entry_station' do
 		# 	max_oystercard = double(:oystercard, no_station: "Waterloo")
@@ -56,6 +52,7 @@ describe Oystercard do
 		end
 
 		it 'deducts money from the balance' do
+			subject.touch_in
 			expect { subject.touch_out}.to change{ subject.balance }.by -1
 		end
 
@@ -72,12 +69,12 @@ describe Oystercard do
 			expect(subject.journeys).to be_empty
 		end
 
-		it "records the entry station and exit station after touch in and touch out" do
-			subject.top_up(5)
-			subject.touch_in("Waterloo")
-			subject.touch_out("Bermondsey")
-			expect(subject.journey.current_journey).to eq ({ "entry station" => "Waterloo", "exit station" => "Bermondsey" })
-		end
+		# it "records the entry station and exit station after touch in and touch out" do
+		# 	subject.top_up(5)
+		# 	subject.touch_in("Waterloo")
+		# 	subject.touch_out("Bermondsey")
+		# 	expect(subject.journeys).to eq [{ "entry station" => "Waterloo", "exit station" => "Bermondsey" }]
+		# end
 	end
 
 	describe '#penalty fares' do

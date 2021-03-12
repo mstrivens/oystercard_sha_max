@@ -13,6 +13,12 @@ class JourneyLog
 
   def finish(end_station)
     @journey_history << @journeys.end_location(end_station)
+
+  end
+
+
+  def completed_journey?
+    @journey_history.last.completed_journey?
   end
 
   private
