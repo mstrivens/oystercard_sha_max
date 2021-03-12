@@ -1,5 +1,7 @@
 class Journey
 attr_reader :end_location, :start_location
+  def initialize
+  end
   def start_location(entry_station)
     @start_location = entry_station
   end
