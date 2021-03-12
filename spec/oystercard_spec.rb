@@ -35,8 +35,7 @@ describe Oystercard do
 
 		it 'sets @entry_station to entry_station' do
 			subject.top_up(5)
-			subject.touch_in('Waterloo')
-			expect(subject.entry_station).to eq 'Waterloo'
+			expect(subject.touch_in('Waterloo')).to eq 'Waterloo'
 		end
 
 		# it 'sets @entry_station to entry_station' do
@@ -77,7 +76,7 @@ describe Oystercard do
 			subject.top_up(5)
 			subject.touch_in("Waterloo")
 			subject.touch_out("Bermondsey")
-			expect(subject.journeys).to eq [{ "entry station" => "Waterloo", "exit station" => "Bermondsey" }]
+			expect(subject.journey.current_journey).to eq ({ "entry station" => "Waterloo", "exit station" => "Bermondsey" })
 		end
 	end
 

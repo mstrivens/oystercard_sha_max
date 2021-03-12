@@ -2,14 +2,13 @@ class Oystercard
 	MAXIMUM_BALANCE = 90
 	MIN_BALANCE = 1
 
-	attr_reader :balance, :entry_station, :journeys
+	attr_reader :balance, :entry_station, :journeys, :journey
 
-	def initialize(balance=0, journey = Journey.new)
+	def initialize(balance=0)
 		@balance = balance
 		@journeys = []
-		@entry_station = entry_station
-		@journey = journey
-		@journey_history = {}
+		@journey = Journey.new
+		@journey_history = JourneyLog.new
 	end
 
 	def top_up(amount)
@@ -18,46 +17,37 @@ class Oystercard
 	end
 
 	def touch_in(entry_station = "unknown")
-		touch_in_penalty_fare if @journey.complete_journey? == false
-		@exit_station = nil
-		@entry_station = entry_station unless min_balance_exceeded
-		@journey.start_location(@entry_station)
+		touch_in_penalty_fare if @journey.completed_journey == false
+		@journey.start_location(entry_station) unless min_balance_exceeded
+		@journey.start_location(entry_station)
 	end
 
 
 	def touch_out(exit_station = "unknown")
-		touch_out_penalty_fare(exit_station) if @journey.complete_journey? == true
-		touch_out_normal(exit_station) unless @journey.complete_journey? == true
+		touch_out_penalty_fare(exit_station) if @journey.completed_journey == true
+		touch_out_normal(exit_station) unless @journey.completed_journey == true
 	end
 
 	private
 
 	def store_journey
-			@journey_history["entry station"] = @entry_station
-			@journey_history["exit station"] = @exit_station
-			@journeys << @journey_history
+			@journeys << @journey.current_journey
 	end
 
 	def touch_in_penalty_fare
 		deduct(6)
-		@journeys << @journey_history["entry station"] = @entry_station
-		# could add in here
-		# @journeys << @journey_history["exit station"] = "Incomplete journey"
+		@journeys << store_journey
 	end
 
 	def touch_out_penalty_fare(exit_station)
 		deduct(6)
-		# could add in here
-		# @journeys << @journey_history["entry station"] = "Incomplete journey"
-		@journeys << @journey_history["exit station"] = exit_station
+		@journeys << store_journey
 	end
 
 	def touch_out_normal(exit_station)
 		deduct(@journey.calc_fare)
-		@exit_station = exit_station
 		store_journey
-		@entry_station = nil
-		@journey.end_location(@exit_station)
+		@journey.end_location(exit_station)
 	end
 
 	def max_balance_reached

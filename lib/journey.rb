@@ -1,19 +1,26 @@
 class Journey
-attr_reader :end_location, :start_location, :current_journey
+
+  attr_reader :end_location, :start_location, :current_journey, :completed_journey
+
   def initialize
     @current_journey = { "entry station" => nil, "exit station" => nil }
+    @completed_journey = true
   end
 
   def start_location(entry_station)
     @current_journey["entry station"] = entry_station
+    complete_journey?
+    entry_station
   end
 
   def end_location(exit_station)
     @current_journey["exit station"] = exit_station
+    complete_journey?
+    exit_station
   end
 
 	def complete_journey?
-		!@current_journey.has_value?(nil)
+		@completed_journey = !@current_journey.has_value?(nil)
 	end
 
   def calc_fare

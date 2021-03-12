@@ -1,10 +1,23 @@
 class JourneyLog
-  attr_reader :journey_start
+
+  attr_reader :journeys
+
   def initialize(journey = Journey.new)
-    @journey = journey
-    @journey_history = {}
+    @journeys = journey
+    @journey_history = []
   end
+
   def start(start_station)
-    @journey_start = @journey.start_location(start_station)
+    @journey_history << @journeys.start_location(start_station)
+  end
+
+  def finish(end_station)
+    @journey_history << @journeys.end_location(end_station)
+  end
+
+  private
+
+  def current_journey
+    @journeys.current_journey
   end
 end
