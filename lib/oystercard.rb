@@ -4,7 +4,7 @@ class Oystercard
 
 	attr_reader :balance, :entry_station, :journeys
 
-	def initialize(balance=1,journey = Journey.new)
+	def initialize(balance=1, journey = Journey.new)
 		@balance = balance
 		@journeys = []
 		@entry_station = entry_station
@@ -41,10 +41,14 @@ class Oystercard
 	def touch_in_penalty_fare
 		deduct(6)
 		@journeys << @journey_history["entry station"] = @entry_station
+		# could add in here
+		# @journeys << @journey_history["exit station"] = "Incomplete journey"
 	end
 
 	def touch_out_penalty_fare(exit_station)
 		deduct(6)
+		# could add in here
+		# @journeys << @journey_history["entry station"] = "Incomplete journey"
 		@journeys << @journey_history["exit station"] = exit_station
 	end
 
