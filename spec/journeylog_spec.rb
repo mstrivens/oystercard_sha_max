@@ -1,7 +1,7 @@
 # require 'journeylog'
 # require 'oystercard'
 # require 'journey'
-# 
+#
 # describe JourneyLog do
 #   describe '#start' do
 #     it 'responds to JourneyLog' do
@@ -33,4 +33,4 @@
 #           expect(journeylog.finish("Euston")).to eq "Euston"
 #       end
 #
-end
+# end

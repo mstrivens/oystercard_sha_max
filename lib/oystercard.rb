@@ -4,7 +4,7 @@ class Oystercard
 
 	attr_reader :balance, :entry_station, :journeys
 
-	def initialize(balance=1, journey = Journey.new)
+	def initialize(balance=0, journey = Journey.new)
 		@balance = balance
 		@journeys = []
 		@entry_station = entry_station
@@ -18,7 +18,7 @@ class Oystercard
 	end
 
 	def touch_in(entry_station = "unknown")
-		touch_in_penalty_fare if @journey.in_journey? == true
+		touch_in_penalty_fare if @journey.complete_journey? == false
 		@exit_station = nil
 		@entry_station = entry_station unless min_balance_exceeded
 		@journey.start_location(@entry_station)
@@ -26,8 +26,8 @@ class Oystercard
 
 
 	def touch_out(exit_station = "unknown")
-		touch_out_penalty_fare(exit_station) if @journey.in_journey? == false
-		touch_out_normal(exit_station) unless @journey.in_journey? == false
+		touch_out_penalty_fare(exit_station) if @journey.complete_journey? == true
+		touch_out_normal(exit_station) unless @journey.complete_journey? == true
 	end
 
 	private
